@@ -47,11 +47,19 @@ _patagrep() {
 
 					if [ $# -eq 0 ]; then
 #echo >&2 "#debug: run FINAL command (no more arg)"
-						( patagrep_basedir="${patagrep_basedir:-.}/$modsdirname" . "${patagrep_basedir:-.}/$modsdirname/$cmd.cmd.sh" "$cmd"; )
+						(
+							set -- "$cmd"
+							patagrep_basedir="${patagrep_basedir:-.}/$modsdirname" \
+							. "${patagrep_basedir:-.}/$modsdirname/$cmd.cmd.sh"
+						)
 						return $?
 					fi
 #echo >&2 "#debug: run PIPE command (there are $# more args)"
-					( patagrep_basedir="${patagrep_basedir:-.}/$modsdirname" . "${patagrep_basedir:-.}/$modsdirname/$cmd.cmd.sh" "$cmd"; ) | "$self" "$@"
+					(
+						set -- "$cmd"
+						patagrep_basedir="${patagrep_basedir:-.}/$modsdirname" \
+						. "${patagrep_basedir:-.}/$modsdirname/$cmd.cmd.sh"
+					) | "$self" "$@"
 					return $?
 				;;
 				(*) break ;;
